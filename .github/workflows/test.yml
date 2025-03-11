@@ -1,0 +1,53 @@
+name: Test Django-Next.js Project
+
+# When to run this workflow
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Jobs to run
+jobs:
+  # Backend Testing
+  backend-tests:
+    runs-on: ubuntu-latest  # Virtual machine provided by GitHub
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3  # Downloads your code to the VM
+
+      - name: Set up Python
+        uses: actions/setup-python@v4  # Installs Python
+        with:
+          python-version: '3.11'  # Match your local Python version
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Installs Django and test tools
+          pip install pytest pytest-django
+
+      - name: Run Backend Tests
+        env:
+          DJANGO_SETTINGS_MODULE: your_project.settings  # Replace with your settings module
+        run: pytest  # Runs your Django tests
+
+  # Frontend Testing
+  frontend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3  # Installs Node.js
+        with:
+          node-version: '18'  # Match your local Node version
+
+      - name: Install Dependencies
+        run: npm install  # Installs Next.js and test tools
+
+      - name: Run Frontend Tests
+        run: npm test  # Runs Jest tests

@@ -32,6 +32,64 @@
     *   Pages with Search and tables with filter options
     *   Paginamtion and Dynamic display of fields details
 
+#   Further  Addition may be implemanted at Backend
+
+    *   Add pagination, sorting, and filtering to the Course and Syllabus API endpoints in Django REST
+        Framework (DRF).
+    *   Add support for bulk uploading syllabus files with metadata in a ZIP file - Update SyllabusResource
+        to process ZIP archives containing PDFs and a metadata CSV (e.g., course_code,version,description).
+    *   Audit Trail Enhancements - Use django-auditlog or a custom model to log detailed changes (e.g.,
+        field-level diffs)
+    *   Add unique constraints (e.g., unique_together = ('course', 'version') for Syllabus) to prevent
+        duplicates.
+    *   Add database indexes for frequently queried fields (e.g., course_code, uploaded_at).
+
+Frontend Improvements (Next.js)
+    *   Implement the async react-select approach for Scales to thousands of courses without fetching
+        everything upfront.
+    *   Add real-time validation feedback (e.g., show "Course is required" immediately).
+    *   Add a "Preview" button to view the uploaded PDF before submission using <iframe> or a modal.
+    *   Add column resizing and drag-to-reorder using a library like react-table.
+    *   Implement infinite scrolling instead of pagination for smoother navigation.
+    *   Add export table data as CSV/PDF directly from the frontend.
+    *   Add loading spinners for async actions (e.g., fetching syllabi, submitting forms).
+    *   Use a consistent theme (e.g., Tailwind CSS variables) for colors and spacing.
+    *   Centralize error handling in syllabusStore.js and courseStore.js with retry logic:
+
+#   New Feature (For Future)
+    *   Add role-based access control (RBAC) using Django’s Group and Permission models or django-guardian.
+    *   Show/hide UI elements based on user role (e.g., hide "Delete" for non-admins).
+    *   Fetch user role from an API endpoint and store in a context.
+    *   Add a SyllabusVersion model to track changes over time
+        class SyllabusVersion(models.Model):
+            syllabus = models.ForeignKey(Syllabus, on_delete=models.CASCADE, related_name='versions')
+            version_number = models.CharField(max_length=10)
+            syllabus_file = models.FileField(upload_to='syllabi/versions/%Y/%m/%d/')
+            created_at = models.DateTimeField(auto_now_add=True)
+    *   Add a "View Version History" button to show past versions in a modal.
+    *   Integrate django-notifications-hq or a custom model for in-app notifications:
+    *   Add a notification bell icon with a dropdown showing recent events using WebSockets (e.g., socket.
+        io).
+    *   Create an API endpoint for stats (e.g., courses per discipline, syllabus uploads per month).
+    *   At Frontend: Add drag-and-drop file upload with progress bars using react-dropzone.
+    *   Add a tags field to Syllabus (e.g., using django-taggit):
+    *   At Frontend- Add a tag input field (e.g., using react-tag-input) and filter syllabi by tags.
+
+Project-Wide Improvements
+    1. Testing
+        Backend: Add unit tests for models, views, and serializers using pytest-django.
+        Frontend: Add tests for components and stores using jest and @testing-library/react.
+    2. CI/CD
+        Set up GitHub Actions or GitLab CI for automated testing, linting, and deployment.
+    3. Documentation
+        Use drf-spectacular for OpenAPI documentation of the backend API.
+        Add JSDoc comments to frontend code and generate docs with jsdoc.
+    4. Security
+        Backend: Add rate limiting with django-ratelimit and CSRF protection for API endpoints.
+        Frontend: Sanitize user inputs to prevent XSS (e.g., using sanitize-html).
+    5. Internationalization (i18n)
+        Add multi-language support using django-i18n and next-i18next.
+
 ------------------------------------------------------------------------------
 #   Athrntication Model Implemantation 
 
@@ -69,7 +127,7 @@
         - Models - Course, Syllbus
         - Pagination implemanted
         - Filtering
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #   Project Implemantation 
 1.  Setup Backend
@@ -199,4 +257,28 @@
 
     >   echo > .gitignore
 
-4.  
+4.  Create Git reposetre at GitHub - Project_Akriti.git
+
+5.  Push codes:
+    >   git init
+    >   git add .
+    >   git commit -m "1. First Prototype"
+    >   git branch -M main
+    >   git remote add origin https://github.com/manishgupta248/Project_Akriti.git
+    >   git push -u origin main
+
+6.  For Further push:
+    >   git add .
+    >   git commit -m "2. Second update"
+    >   git branch -M main
+    >   git remote add origin https://github.com/manishgupta248/Project_Akriti.git
+    >   git push -u origin main
+---------------------------------------------------------------------------
+#   Step 2: Prepare Your Project for Testing
+1.  Open requirements.txt in the root or backend folder.
+
+        pytest
+        pytest-django
+        
+2.  Install Locally (optional, for testing locally first):
+    >   pip install -r requirements.txt
